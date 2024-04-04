@@ -74,7 +74,7 @@
 
       .discount-ribbon {
         position: absolute;
-        top: 1px;
+        top: 10px;
         right: -40px;
         width: 80px;
         background-color: $color-primary-dark;
@@ -117,19 +117,18 @@
           font-size: 36px;
           color: $color-primary;
           margin-bottom: 10px;
+        }
+        .product-oldprice {
+          font-size: 20px;
+          color: $color-text-tertiary;
+          text-decoration: line-through;
+          margin-bottom: 5px;
+        }
 
-          .product-oldprice {
-            font-size: 20px;
-            color: $color-text-tertiary;
-            text-decoration: line-through;
-            margin-bottom: 5px;
-          }
-
-          .product-validity {
-            font-size: 16px;
-            color: $color-text-quaternary;
-            margin-top: 10px;
-          }
+        .product-validity {
+          font-size: 16px;
+          color: $color-text-quaternary;
+          margin-top: 10px;
         }
       }
     }

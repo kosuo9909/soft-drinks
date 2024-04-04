@@ -74,10 +74,18 @@ export class SoftDrinksService {
       );
 
       filteredProducts.forEach((product: Product) => {
-        drinksProducts.push({
-          supermarket: supermarket.supermarket,
-          product: product,
-        });
+        const productExists = drinksProducts.find(
+          (drinkProduct) =>
+            drinkProduct.supermarket === supermarket.supermarket &&
+            drinkProduct.product.name === product.name
+        );
+
+        if (!productExists) {
+          drinksProducts.push({
+            supermarket: supermarket.supermarket,
+            product: product,
+          });
+        }
       });
     });
 
