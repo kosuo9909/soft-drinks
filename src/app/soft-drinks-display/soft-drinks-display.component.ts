@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Product, SoftDrinksService } from '../soft-drinks.service';
+import { Product, SoftDrinksService } from '../services/soft-drinks.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Subject } from 'rxjs';
-import { IndexedDBService } from '../indexed-db.service';
+import { IndexedDBService } from '../services/indexed-db.service';
 
 interface ProductImageMappings {
   [key: string]: string;
