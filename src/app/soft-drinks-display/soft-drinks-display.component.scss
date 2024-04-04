@@ -1,0 +1,138 @@
+.soft-drinks-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+
+    h2 {
+        font-size: 48px;
+        font-weight: bold;
+        color: #ff6b6b;
+        text-align: center;
+        margin-bottom: 40px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .sorting-options {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 30px;
+
+        button {
+            background-color: #ff6b6b;
+            color: #ffffff;
+            padding: 12px 24px;
+            font-size: 16px;
+            margin-left: 15px;
+            cursor: pointer;
+            border-radius: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: none;
+
+            &:hover {
+                background-color: #ff8e8e;
+                transform: translateY(-2px);
+                box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            &:focus {
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.4);
+            }
+
+            &:active {
+                background-color: #ff4f4f;
+            }
+        }
+    }
+
+    .soft-drinks-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-gap: 30px;
+
+        .soft-drink-item {
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+
+            &:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+            }
+
+            .discount-ribbon {
+                position: absolute;
+                top: 1px;
+                right: -40px;
+                width: 80px;
+                background-color: #ff4f4f;
+                color: #ffffff;
+                font-size: 18px;
+                padding: 8px 30px;
+                transform: rotate(45deg);
+                box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .supermarket {
+                font-size: 24px;
+                color: #333333;
+                margin-bottom: 20px;
+            }
+
+            .product-details {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                .product-image {
+                    max-height: 250px;
+                    width: auto;
+                    margin-bottom: 20px;
+                    transition: transform 0.3s ease;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+                    &:hover {
+                        transform: scale(1.05);
+                    }
+                }
+
+                .product-name {
+                    font-size: 24px;
+                    color: #333333;
+                    margin-bottom: 10px;
+                }
+
+                .product-price {
+                    font-size: 36px;
+                    color: #ff6b6b;
+                    margin-bottom: 10px;
+                }
+
+                .product-oldprice {
+                    font-size: 20px;
+                    color: #999999;
+                    text-decoration: line-through;
+                    margin-bottom: 5px;
+                }
+
+                .product-validity {
+                    font-size: 16px;
+                    color: #666666;
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
+}

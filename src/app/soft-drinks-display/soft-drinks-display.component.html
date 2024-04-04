@@ -1,0 +1,36 @@
+<div class="soft-drinks-container">
+  <h2>Soft Drinks</h2>
+  <div *ngIf="softDrinks.length === 0" class="loading">
+    Loading soft drinks...
+  </div>
+  <div class="sorting-options">
+    <button (click)="sortBy('price')">Sort by Lowest Price</button>
+    <button (click)="sortBy('discount')">Sort by Highest Discount</button>
+  </div>
+  <div *ngIf="softDrinks.length > 0" class="soft-drinks-list">
+    <ng-container *ngFor="let item of softDrinks">
+      <div *ngIf="item.product.oldPrice" class="soft-drink-item">
+        <div class="discount-ribbon">
+          -{{ calculateDiscount(item.product.price, item.product.oldPrice) }}%
+        </div>
+        <div class="supermarket">{{ item.supermarket }}</div>
+        <div class="product-details">
+          <div class="product-name">{{ item.product.name }}</div>
+          <div class="product-name">{{ item.product.quantity }}</div>
+          <div class="product-price">{{ item.product.price }} лв.</div>
+          <div class="product-oldprice">{{ item.product.oldPrice }} лв.</div>
+          <div class="product-validity">
+            Валидно от: {{ item.product.validFrom | date }} - Валидно до:
+            {{ item.product.validUntil | date }}
+          </div>
+          <img
+            *ngIf="item.product.picUrl"
+            [src]="item.product.picUrl"
+            alt="Product Image"
+            class="product-image"
+          />
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
