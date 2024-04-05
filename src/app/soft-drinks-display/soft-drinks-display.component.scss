@@ -96,7 +96,7 @@
       .lidl-ribbon {
         &::before {
           content: "";
-          background: url("../../assets/Logo_BILLA.svg.png") no-repeat center;
+          background: url("../../assets/Lidl-Logo.svg") no-repeat center;
           background-size: contain;
         }
       }
@@ -129,7 +129,7 @@
 
       .tmarket-ribbon {
         &::before {
-          //   background: url('path-to-tmarket-logo.svg') no-repeat center;
+          background: url("../../assets/TMarket-Logo.png") no-repeat center;
           background-size: contain;
         }
       }

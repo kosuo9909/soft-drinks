@@ -1,11 +1,17 @@
 <div class="soft-drinks-container">
-  <h2>Soft Drinks</h2>
-  <div *ngIf="softDrinks.length === 0" class="loading">
+  <h2 i18n="@@softDrinksTitle">Soft Drinks</h2>
+  <div *ngIf="softDrinks.length === 0" class="loading" i18n="@@loadingDrinks">
     Loading soft drinks...
   </div>
   <div class="sorting-options">
-    <button (click)="sortBy('price')">Sort by Lowest Price</button>
-    <button (click)="sortBy('discount')">Sort by Highest Discount</button>
+    <button (click)="sortBy('price')" i18n="@@sortByPrice">
+      Sort by Lowest Price
+    </button>
+    <button (click)="sortBy('discount')" i18n="@@sortyByDiscount">
+      Sort by Highest Discount
+    </button>
+    <button (click)="switchLanguage('en')">EN</button>
+    <button (click)="switchLanguage('bg')">BG</button>
   </div>
   <div *ngIf="softDrinks.length > 0" class="soft-drinks-list">
     <ng-container *ngFor="let item of softDrinks">
@@ -13,30 +19,31 @@
         <div class="discount-ribbon">
           -{{ calculateDiscount(item.product.price, item.product.oldPrice) }}%
         </div>
-        <div [ngClass]="{
-          'ribbon': true,
-          'fantastiko-ribbon': item.supermarket === 'Fantastiko',
-          'lidl-ribbon': item.supermarket === 'Lidl',
-          'kaufland-ribbon': item.supermarket === 'Kaufland',
-          'billa-ribbon': item.supermarket === 'Billa',
-          'tmarket-ribbon': item.supermarket === 'TMarket'
-        }" >
-        </div>
+        <div
+          [ngClass]="{
+            ribbon: true,
+            'fantastiko-ribbon': item.supermarket === 'Fantastiko',
+            'lidl-ribbon': item.supermarket === 'Lidl',
+            'kaufland-ribbon': item.supermarket === 'Kaufland',
+            'billa-ribbon': item.supermarket === 'Billa',
+            'tmarket-ribbon': item.supermarket === 'T-Market'
+          }"
+        ></div>
         <div class="product-details">
-          <div class="product-name">{{ item.product.name }}</div>
-          <div class="product-name">{{ item.product.quantity }}</div>
-          <div class="product-price">{{ item.product.price }} лв.</div>
-          <div class="product-oldprice">{{ item.product.oldPrice }} лв.</div>
-          <div class="product-validity">
-            Валидно от: {{ item.product.validFrom | date }} - Валидно до:
-            {{ item.product.validUntil | date }}
-          </div>
           <img
             *ngIf="item.product.picUrl"
             [src]="item.product.picUrl"
             alt="Product Image"
             class="product-image"
           />
+          <div class="product-price">{{ item.product.price }} leva.</div>
+          <div class="product-oldprice">{{ item.product.oldPrice }} leva.</div>
+          <div class="product-name">{{ item.product.name }}</div>
+          <div class="product-name">{{ item.product.quantity }}</div>
+          <div class="product-validity">
+            Valid from: {{ item.product.validFrom | date }} - Valid until:
+            {{ item.product.validUntil | date }}
+          </div>
         </div>
       </div>
     </ng-container>
