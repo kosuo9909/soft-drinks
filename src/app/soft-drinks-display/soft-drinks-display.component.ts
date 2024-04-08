@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { IndexedDBService } from '../services/indexed-db.service';
-import { TranslationService } from '../services/translation-service.service';
+import { setLocale } from '../../locale/i18n';
 
 interface ProductImageMappings {
   [key: string]: string;
@@ -40,12 +40,13 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
 
   constructor(
     private softDrinksService: SoftDrinksService,
-    private indexedDBService: IndexedDBService,
-    private translationService: TranslationService
+    private indexedDBService: IndexedDBService
   ) {}
 
   public async switchLanguage(language: string) {
-    await this.translationService.changeLocale(language);
+    console.log('Changing language to:', language);
+    setLocale(language, localStorage);
+    location.reload();
   }
 
   public calculateDiscount(price: number, oldPrice: number): number {
