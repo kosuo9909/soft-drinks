@@ -10,8 +10,9 @@
     <button (click)="sortBy('discount')" i18n="@@sortyByDiscount">
       Sort by Highest Discount
     </button>
-    <button (click)="switchLanguage('en-GB')">EN</button>
-    <button (click)="switchLanguage('bg-BG')">BG</button>
+    <button (click)="switchLanguage()">
+      {{ languageNames[currentLanguage] }}
+    </button>
   </div>
   <div *ngIf="softDrinks.length > 0" class="soft-drinks-list">
     <ng-container *ngFor="let item of softDrinks">

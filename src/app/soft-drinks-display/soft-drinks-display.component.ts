@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { IndexedDBService } from '../services/indexed-db.service';
-import { setLocale } from '../../locale/i18n';
+import { getLocale, setLocale } from '../../locale/i18n';
 
 interface ProductImageMappings {
   [key: string]: string;
@@ -21,6 +21,7 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
   public softDrinks: { supermarket: string; product: Product }[] = [];
   private _ngUnsubscribe = new Subject<void>();
   public selectedSortOption: 'price' | 'discount' = 'price';
+  public currentLanguage: 'en-GB' | 'bg-BG' | string = 'en-GB';
   private productMappings: ProductImageMappings = {
     'Газирана вода Billa Произход – България':
       'https://mysupermarket.bg/api/public/images/products/2axo2a_1637589490741.png',
@@ -36,6 +37,17 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
       'https://mysupermarket.bg/api/public/images/tmarket/fc1ff80ff007e003e007f007f807fc4ffc8ff00ff007e007e007e007f00ffc9f.webp',
     'Газирана напитка CRODO различни видове':
       'https://www.supermag.bg/images/2022_3/gazirana-napitka-crodo-oran-soda-330ml.jpg?w=426&h=352',
+    'Газирана напитка Coca Cola':
+      'https://storage.googleapis.com/images-mus-prd-7e2fdbe.mus.prd.v8.commerce.mi9cloud.com/product-images/detail/1414906000_1',
+    'Газирана напитка Pepsi, Mirinda или 7UP':
+      'https://kaufland.media.schwarz/is/image/schwarz/02300260B_P?JGstbGVnYWN5LW9uc2l0ZS0yJA==',
+    'Газирана безалкохолна напитка COCA-COLA; FANTA различни видове':
+      'https://myplov.com/image/cache/catalog/Fanta-550x688w.png',
+  };
+
+  public languageNames: { [key: string]: string } = {
+    'en-GB': 'Български',
+    'bg-BG': 'English',
   };
 
   constructor(
@@ -43,9 +55,11 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
     private indexedDBService: IndexedDBService
   ) {}
 
-  public async switchLanguage(language: string) {
-    console.log('Changing language to:', language);
-    setLocale(language, localStorage);
+  public async switchLanguage() {
+    const newLanguage = this.currentLanguage === 'en-GB' ? 'bg-BG' : 'en-GB';
+    setLocale(newLanguage, localStorage);
+    console.log('Changing language to:', newLanguage);
+    this.currentLanguage = newLanguage;
     location.reload();
   }
 
@@ -86,6 +100,7 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit() {
+    this.currentLanguage = getLocale();
     this.softDrinks = await this.softDrinksService.extractProducts();
     this.softDrinks.forEach((item) => {
       if (!item.product.picUrl) {
