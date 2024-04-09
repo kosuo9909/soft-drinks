@@ -1,6 +1,6 @@
 const LOCALE_STORAGE_KEY = 'app-locale';
 
-export const AVAILABLE_LOCALES = ['en-GB', 'bg-BG'] as const;
+export const AVAILABLE_LOCALES = ['en-GB', 'bg-BG'];
 
 export type Locale = (typeof AVAILABLE_LOCALES)[number];
 

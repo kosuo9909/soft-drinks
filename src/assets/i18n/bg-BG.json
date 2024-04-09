@@ -1,10 +1,11 @@
 {
   "locale": "bg",
   "translations": {
-    "softDrinksTitle": "Напитки",
-    "loadingDrinks": " Зареждане на безалкохолни напитки... ",
-    "sortByPrice": " Сортиране по най-ниска цена ",
-    "sortyByDiscount": " Сортиране по най-голяма отстъпка ",
+    "softDrinksTitle": "Газирани напитки",
+    "loadingDrinks": " Зареждане на газирани безалкохолни напитки... ",
+    "sortBy": "Сортиране по",
+    "sortByPrice": " Сортиране по цена ",
+    "sortyByDiscount": " Сортиране по отстъпка ",
     "currency": "{$INTERPOLATION} лева.",
     "validFromUntil": " Валидно от: {$INTERPOLATION} - Валидно до: {$INTERPOLATION_1} "
   }

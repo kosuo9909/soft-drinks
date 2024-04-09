@@ -1,9 +1,10 @@
 {
   "locale": "en-GB",
   "translations": {
-    "softDrinksTitle": "Soft Drinks",
+    "softDrinksTitle": "Soft drinks",
     "loadingDrinks": " Loading soft drinks... ",
     "sortByPrice": " Sort by Lowest Price ",
+    "sortBy": "Sort by",
     "sortyByDiscount": " Sort by Highest Discount ",
     "currency": "{$INTERPOLATION} leva.",
     "validFromUntil": " Valid from: {$INTERPOLATION} - Valid until: {$INTERPOLATION_1} "

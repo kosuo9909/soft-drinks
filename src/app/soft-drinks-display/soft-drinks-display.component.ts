@@ -6,11 +6,11 @@ import { Subject } from 'rxjs';
 import { IndexedDBService } from '../services/indexed-db.service';
 import { getLocale, setLocale } from '../../locale/i18n';
 import { productMappings } from '../../assets/productMappingsMock';
-
+import { MatSelectModule } from '@angular/material/select';
 @Component({
   selector: 'app-soft-drinks-display',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule, HttpClientModule, MatSelectModule],
   templateUrl: './soft-drinks-display.component.html',
   styleUrls: ['./soft-drinks-display.component.scss'],
 })

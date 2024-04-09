@@ -3,8 +3,9 @@
   "translations": {
     "softDrinksTitle": "Soft Drinks",
     "loadingDrinks": " Loading soft drinks... ",
-    "sortByPrice": " Sort by Lowest Price ",
-    "sortyByDiscount": " Sort by Highest Discount ",
+    "sortBy": "Sort by",
+    "sortByPrice": "Sort by Lowest Price",
+    "sortyByDiscount": "Sort by Highest Discount",
     "currency": "{$INTERPOLATION}",
     "validFromUntil": " Valid from: {$INTERPOLATION} - Valid until: {$INTERPOLATION_1} "
   }

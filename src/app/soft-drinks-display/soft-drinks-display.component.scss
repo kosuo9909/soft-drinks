@@ -17,19 +17,10 @@
     justify-content: flex-end;
     margin-bottom: 20px;
 
-    button {
-      background-color: $color-primary;
-      color: $color-text-primary;
-      padding: 8px 16px;
-      font-size: 14px;
-      margin-left: 10px;
-      cursor: pointer;
-      border: none;
-
-      &:hover {
-        background-color: $color-primary-dark;
-      }
+    mat-select {
+      color: $color-primary;
     }
+
   }
 
   .soft-drinks-list {
