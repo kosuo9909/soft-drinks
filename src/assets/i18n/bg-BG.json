@@ -6,7 +6,7 @@
     "sortBy": "Сортиране по",
     "sortByPrice": " Сортиране по цена ",
     "sortyByDiscount": " Сортиране по отстъпка ",
-    "currency": "{$INTERPOLATION} лева.",
+    "currency": "{$INTERPOLATION} лв.",
     "validFromUntil": " Валидно от: {$INTERPOLATION} - Валидно до: {$INTERPOLATION_1} ",
     "language": "{$START_TAG_MAT_ICON}language{$CLOSE_TAG_MAT_ICON}Език "
   }

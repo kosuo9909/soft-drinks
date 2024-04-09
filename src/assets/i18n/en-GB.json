@@ -6,7 +6,7 @@
     "sortByPrice": " Sort by Lowest Price ",
     "sortBy": "Sort by",
     "sortyByDiscount": " Sort by Highest Discount ",
-    "currency": "{$INTERPOLATION} leva.",
+    "currency": "{$INTERPOLATION} lv.",
     "validFromUntil": " Valid from: {$INTERPOLATION} - Valid until: {$INTERPOLATION_1} ",
     "language": "{$START_TAG_MAT_ICON}language{$CLOSE_TAG_MAT_ICON}Language "
   }

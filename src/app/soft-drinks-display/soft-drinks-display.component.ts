@@ -115,6 +115,7 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
           });
       }
     });
+    this.sortSoftDrinks();
   }
 
   public async ngOnInit() {
