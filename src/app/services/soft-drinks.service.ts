@@ -31,21 +31,36 @@ export class SoftDrinksService {
     private http: HttpClient,
     private indexedDBService: IndexedDBService
   ) {}
-  public async extractProducts(): Promise<
-    { supermarket: string; product: Product }[]
-  > {
+
+  public async getTotalProducts(): Promise<number> {
+    const cachedProducts = await this.indexedDBService.getProducts(
+      'softDrinks'
+    );
+    if (cachedProducts) {
+      const filteredProducts = this.filterDrinksProducts(cachedProducts);
+      return filteredProducts.length;
+    }
+    return 0;
+  }
+
+  public async extractProducts(
+    startIndex: number,
+    endIndex: number
+  ): Promise<{ supermarket: string; product: Product }[]> {
     const CACHE_VALIDITY_MINUTES = 60;
     const isCacheValid = await this.indexedDBService.isCacheValid(
       'softDrinks',
       CACHE_VALIDITY_MINUTES
     );
+
     if (isCacheValid) {
       console.log('Retrieved from cache');
       const cachedProducts = await this.indexedDBService.getProducts(
         'softDrinks'
       );
       if (cachedProducts) {
-        return this.filterDrinksProducts(cachedProducts);
+        const filteredProducts = this.filterDrinksProducts(cachedProducts);
+        return filteredProducts.slice(startIndex, endIndex);
       }
       return [];
     } else {
@@ -59,7 +74,8 @@ export class SoftDrinksService {
       const timestamp = new Date();
       await this.indexedDBService.setLastUpdated('softDrinks', timestamp);
 
-      return this.filterDrinksProducts(products);
+      const filteredProducts = this.filterDrinksProducts(products);
+      return filteredProducts.slice(startIndex, endIndex);
     }
   }
 
@@ -69,8 +85,9 @@ export class SoftDrinksService {
     const drinksProducts: { supermarket: string; product: Product }[] = [];
 
     supermarkets.forEach((supermarket: Supermarket) => {
-      const filteredProducts = supermarket.products.filter((product: Product) =>
-        product.name.includes('Газирана')
+      const filteredProducts = supermarket.products.filter(
+        (product: Product) =>
+          product.name.includes('Газирана') && product.oldPrice
       );
 
       filteredProducts.forEach((product: Product) => {
