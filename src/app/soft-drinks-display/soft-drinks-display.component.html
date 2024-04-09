@@ -37,8 +37,8 @@
             alt="Product Image"
             class="product-image" 
           />
-          <div class="product-price" i18n='@@currency'>{{ item.product.price }}</div>
-          <div class="product-oldprice" i18n='@@currency'>{{ item.product.oldPrice }}</div>
+          <div class="product-price" i18n='@@currency'>{{ item.product.price | number: '1.2-2' }}</div>
+          <div class="product-oldprice" i18n='@@currency'>{{ item.product.oldPrice | number: '1.2-2' }}</div>
           <div class="product-name">{{ item.product.name }}</div>
           <div class="product-name">{{ item.product.quantity }}</div>
           <div class="product-validity" i18n='@@validFromUntil'>
