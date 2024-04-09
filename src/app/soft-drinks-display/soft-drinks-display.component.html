@@ -1,21 +1,34 @@
 <div class="soft-drinks-container">
   <h2 i18n="@@softDrinksTitle">Soft Drinks</h2>
-  
+
   <div *ngIf="softDrinks.length === 0" class="loading" i18n="@@loadingDrinks">
     Loading soft drinks...
   </div>
-  
+
   <div class="sorting-options">
     <mat-form-field>
-      <mat-label i18n='@@sortBy'>Sort by</mat-label>
-      <mat-select disableRipple [(value)]="selectedSortOption" (selectionChange)="sortBy($event.value)">
-        <mat-option [value]="'price'" i18n="@@sortByPrice">Sort by Lowest Price</mat-option>
-        <mat-option [value]="'discount'" i18n="@@sortyByDiscount">Sort by Highest Discount</mat-option>
+      <mat-label i18n="@@sortBy">Sort by</mat-label>
+      <mat-select
+        disableRipple
+        [(value)]="selectedSortOption"
+        (selectionChange)="sortBy($event.value)"
+      >
+        <mat-option [value]="'price'" i18n="@@sortByPrice"
+          >Sort by Lowest Price</mat-option
+        >
+        <mat-option [value]="'discount'" i18n="@@sortyByDiscount"
+          >Sort by Highest Discount</mat-option
+        >
       </mat-select>
     </mat-form-field>
-    <button (click)="switchLanguage()">
-      {{ languageNames[currentLanguage] }}
+    <button mat-stroked-button [matMenuTriggerFor]="language" i18n="@@language">
+      <mat-icon>language</mat-icon>Language
     </button>
+    <mat-menu #language="matMenu">
+      <button mat-flat-button style="width: 100%" (click)="switchLanguage()">
+        {{ languageNames[currentLanguage] }}
+      </button>
+    </mat-menu>
   </div>
   <div *ngIf="softDrinks.length > 0" class="soft-drinks-list">
     <ng-container *ngFor="let item of softDrinks">
@@ -38,13 +51,17 @@
             *ngIf="item.product.picUrl"
             [src]="item.product.picUrl"
             alt="Product Image"
-            class="product-image" 
+            class="product-image"
           />
-          <div class="product-price" i18n='@@currency'>{{ item.product.price | number: '1.2-2' }}</div>
-          <div class="product-oldprice" i18n='@@currency'>{{ item.product.oldPrice | number: '1.2-2' }}</div>
+          <div class="product-price" i18n="@@currency">
+            {{ item.product.price | number : "1.2-2" }}
+          </div>
+          <div class="product-oldprice" i18n="@@currency">
+            {{ item.product.oldPrice | number : "1.2-2" }}
+          </div>
           <div class="product-name">{{ item.product.name }}</div>
           <div class="product-name">{{ item.product.quantity }}</div>
-          <div class="product-validity" i18n='@@validFromUntil'>
+          <div class="product-validity" i18n="@@validFromUntil">
             Valid from: {{ item.product.validFrom | date }} - Valid until:
             {{ item.product.validUntil | date }}
           </div>

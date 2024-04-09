@@ -7,10 +7,20 @@ import { IndexedDBService } from '../services/indexed-db.service';
 import { getLocale, setLocale } from '../../locale/i18n';
 import { productMappings } from '../../assets/productMappingsMock';
 import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
 @Component({
   selector: 'app-soft-drinks-display',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, MatSelectModule],
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    MatSelectModule,
+    MatIconModule,
+    MatMenuModule,
+    MatButtonModule,
+  ],
   templateUrl: './soft-drinks-display.component.html',
   styleUrls: ['./soft-drinks-display.component.scss'],
 })

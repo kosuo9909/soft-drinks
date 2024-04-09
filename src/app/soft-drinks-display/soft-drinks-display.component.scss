@@ -21,6 +21,20 @@
       color: $color-primary;
     }
 
+    button {
+      background-color: $color-primary;
+      color: $color-text-primary;
+      height: 56px;
+      padding: 8px 16px;
+      font-size: 14px;
+      margin-left: 10px;
+      cursor: pointer;
+      border: none;
+
+      &:hover {
+        background-color: $color-primary-dark;
+      }
+    }
   }
 
   .soft-drinks-list {
