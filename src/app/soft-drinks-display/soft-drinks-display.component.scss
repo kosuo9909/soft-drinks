@@ -1,52 +1,32 @@
 @import "../variables";
+
 .soft-drinks-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
   background-color: $color-background-base;
-  box-shadow: 0 4px 8px $color-shadow;
-  border-radius: 10px;
 
   h2 {
-    font-size: 48px;
-    font-weight: bold;
+    font-size: 36px;
     color: $color-primary;
-    text-align: center;
-    margin-bottom: 40px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-shadow: 2px 2px 4px $color-shadow-hover;
+    margin-bottom: 20px;
   }
 
   .sorting-options {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 
     button {
       background-color: $color-primary;
       color: $color-text-primary;
-      padding: 12px 24px;
-      font-size: 16px;
-      margin-left: 15px;
+      padding: 8px 16px;
+      font-size: 14px;
+      margin-left: 10px;
       cursor: pointer;
-      border-radius: 30px;
-      box-shadow: 0 4px 6px $color-shadow;
-      transition: all 0.3s ease;
       border: none;
 
       &:hover {
-        background-color: $color-primary-light;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 8px $color-shadow-hover;
-      }
-
-      &:focus {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba($color-primary, 0.4);
-      }
-
-      &:active {
         background-color: $color-primary-dark;
       }
     }
@@ -55,114 +35,48 @@
   .soft-drinks-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    grid-gap: 30px;
+    grid-gap: 20px;
 
     .soft-drink-item {
       background-color: $color-text-primary;
-      border-radius: 15px;
-      padding: 30px;
-      box-shadow: 0 8px 16px $color-shadow;
+      padding: 20px;
       text-align: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
       overflow: hidden;
-
-      &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 12px 20px $color-shadow-hover;
-      }
 
       .ribbon {
         position: absolute;
         top: 0;
         left: 0;
-        z-index: 10;
-        width: 80px;
-        height: 80px;
-        text-align: center;
-        &::before {
-          content: "";
-          position: absolute;
-          top: 10px;
-          left: -20px;
-          width: 100%;
-          height: 100%;
-          transform: rotate(90deg);
-          background: url("../../assets/Logo_BILLA.svg.png") no-repeat center;
-          background-size: contain;
-        }
-      }
-
-      .lidl-ribbon {
-        &::before {
-          content: "";
-          background: url("../../assets/Lidl-Logo.svg") no-repeat center;
-          background-size: contain;
-        }
-      }
-
-      .kaufland-ribbon {
-        &::before {
-          content: "";
-          background: url("../../assets/Kaufland_2016_horizontal.svg.png")
-            no-repeat center;
-          background-size: contain;
-        }
-      }
-
-      .fantastiko-ribbon {
-        &::before {
-          content: "";
-          background: url("../../assets/logo-fantastico@2x.png") no-repeat
-            center;
-          background-size: contain;
-        }
-      }
-
-      .billa-ribbon {
-        &::before {
-          content: "";
-          background: url("../../assets/Logo_BILLA.svg.png") no-repeat center;
-          background-size: contain;
-        }
-      }
-
-      .tmarket-ribbon {
-        &::before {
-          background: url("../../assets/TMarket-Logo.png") no-repeat center;
-          background-size: contain;
-        }
+        width: 60px;
+        height: 60px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        z-index: 1;
       }
 
       .discount-ribbon {
         position: absolute;
         top: 10px;
         right: -40px;
-        width: 80px;
-        background-color: $color-primary-dark;
+        background-color: $color-primary;
         color: $color-text-primary;
         font-size: 18px;
-        padding: 8px 30px;
+        font-weight: bold;
+        padding: 8px 40px;
         transform: rotate(45deg);
-        box-shadow: 2px 2px 5px $color-shadow;
-      }
-
-      .supermarket {
-        font-size: 24px;
-        color: $color-text-secondary;
-        margin-bottom: 20px;
+        z-index: 1;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
       }
 
       .product-details {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
         .product-image {
-          max-height: 250px;
+          max-height: 200px;
           width: auto;
-          margin-bottom: 20px;
+          margin-bottom: 10px;
           transition: transform 0.3s ease;
+          z-index: 0;
 
           &:hover {
             transform: scale(1.05);
@@ -170,27 +84,27 @@
         }
 
         .product-name {
-          font-size: 24px;
+          font-size: 18px;
           color: $color-text-secondary;
-          margin-bottom: 10px;
+          margin-bottom: 5px;
         }
 
         .product-price {
-          font-size: 36px;
+          font-size: 24px;
           color: $color-primary;
-          margin-bottom: 10px;
+          margin-bottom: 5px;
         }
+
         .product-oldprice {
-          font-size: 20px;
+          font-size: 16px;
           color: $color-text-tertiary;
           text-decoration: line-through;
           margin-bottom: 5px;
         }
 
         .product-validity {
-          font-size: 16px;
+          font-size: 14px;
           color: $color-text-quaternary;
-          margin-top: 10px;
         }
       }
     }
