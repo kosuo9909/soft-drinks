@@ -46,14 +46,35 @@
 
       .ribbon {
         position: absolute;
-        top: 0;
+        top: 15px;
         left: 0;
-        width: 60px;
+        z-index: 1;
+        width: 80px;
         height: 60px;
+        transform: rotate(90deg);
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center;
-        z-index: 1;
+      }
+
+      .lidl-ribbon {
+        background-image: url("../../assets/Lidl-Logo.svg");
+      }
+
+      .kaufland-ribbon {
+        background-image: url("../../assets/Kaufland_2016_horizontal.svg.png");
+      }
+
+      .fantastiko-ribbon {
+        background-image: url("../../assets/logo-fantastico@2x.png");
+      }
+
+      .billa-ribbon {
+        background-image: url("../../assets/Logo_BILLA.svg.png");
+      }
+
+      .tmarket-ribbon {
+        background-image: url("../../assets/TMarket-Logo.png");
       }
 
       .discount-ribbon {
