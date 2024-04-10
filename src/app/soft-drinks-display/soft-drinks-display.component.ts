@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Product, SoftDrinksService } from '../services/soft-drinks.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { IndexedDBService } from '../services/indexed-db.service';
 import { getLocale, setLocale } from '../../locale/i18n';
 import { productMappings } from '../../assets/productMappingsMock';
@@ -35,6 +35,8 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
   public pageSize = 10;
   public pageSizeOptions = [10, 25, 50];
   public currentPage = 0;
+  private startIndex = this.currentPage * this.pageSize;
+  private endIndex = this.startIndex + this.pageSize;
 
   public languageNames: { [key: string]: string } = {
     'en-GB': 'Български',
@@ -59,20 +61,12 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
   }
 
   public sortBy(option: 'price' | 'discount'): void {
+    this.softDrinksService.setSortOption(
+      option,
+      this.startIndex,
+      this.endIndex
+    );
     this.selectedSortOption = option;
-    this.sortSoftDrinks();
-  }
-
-  private sortSoftDrinks(): void {
-    if (this.selectedSortOption === 'price') {
-      this.softDrinks.sort((a, b) => a.product.price - b.product.price);
-    } else if (this.selectedSortOption === 'discount') {
-      this.softDrinks.sort(
-        (a, b) =>
-          this.calculateDiscount(b.product.price, b.product.oldPrice) -
-          this.calculateDiscount(a.product.price, a.product.oldPrice)
-      );
-    }
   }
 
   public async fetchImageUrl(productName: string): Promise<string> {
@@ -97,31 +91,42 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
   }
 
   private async loadSoftDrinks(): Promise<void> {
-    const startIndex = this.currentPage * this.pageSize;
-    const endIndex = startIndex + this.pageSize;
-    this.softDrinks = await this.softDrinksService.extractProducts(
-      startIndex,
-      endIndex
+    await this.softDrinksService.extractProducts(
+      this.startIndex,
+      this.endIndex
     );
+
     this.totalItems = await this.softDrinksService.getTotalProducts();
-    this.softDrinks.forEach((item) => {
-      if (!item.product.picUrl) {
-        this.fetchImageUrl(item.product.name)
-          .then((url) => {
-            item.product.picUrl = url;
-          })
-          .catch((error) => {
-            console.error('Error fetching the image:', error);
-          });
-      }
-    });
-    this.sortSoftDrinks();
   }
 
   public async ngOnInit() {
+    this.softDrinksService.sortedProducts$
+      .pipe(takeUntil(this._ngUnsubscribe))
+      .subscribe((products) => {
+        products.forEach((item) => {
+          if (!item.product.picUrl) {
+            this.fetchImageUrl(item.product.name)
+              .then((url) => {
+                item.product.picUrl = url;
+              })
+              .catch((error) => {
+                console.error('Error fetching the image:', error);
+              });
+          }
+        });
+
+        this.softDrinks = products;
+      });
     this.currentLanguage = getLocale();
-    this.loadSoftDrinks();
+    this.softDrinksService.setSortOption(
+      this.selectedSortOption,
+      this.startIndex,
+      this.endIndex
+    );
+    await this.loadSoftDrinks();
     this.softDrinks.forEach((item) => {
+      console.log(item.product, item.product.picUrl);
+
       if (!item.product.picUrl) {
         this.fetchImageUrl(item.product.name)
           .then((url) => {

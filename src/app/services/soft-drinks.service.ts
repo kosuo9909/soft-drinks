@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 export interface Product {
@@ -32,21 +32,50 @@ export class SoftDrinksService {
     private indexedDBService: IndexedDBService
   ) {}
 
-  public async getTotalProducts(): Promise<number> {
-    const cachedProducts = await this.indexedDBService.getProducts(
-      'softDrinks'
-    );
-    if (cachedProducts) {
-      const filteredProducts = this.filterDrinksProducts(cachedProducts);
-      return filteredProducts.length;
+  private sortedProductsSubject = new BehaviorSubject<
+    { supermarket: string; product: Product }[]
+  >([]);
+  public sortedProducts$ = this.sortedProductsSubject.asObservable();
+
+  private sortedProducts: { supermarket: string; product: Product }[] = [];
+  private selectedSortOption: 'price' | 'discount' = 'price';
+
+  public setSortOption(
+    option: 'price' | 'discount',
+    startIndex: number,
+    endIndex: number
+  ): void {
+    this.selectedSortOption = option;
+    this.sortProducts(startIndex, endIndex);
+  }
+
+  private sortProducts(startIndex?: number, endIndex?: number): void {
+    if (this.selectedSortOption === 'price') {
+      this.sortedProducts.sort((a, b) => a.product.price - b.product.price);
+    } else if (this.selectedSortOption === 'discount') {
+      this.sortedProducts.sort(
+        (a, b) =>
+          this.calculateDiscount(b.product.price, b.product.oldPrice) -
+          this.calculateDiscount(a.product.price, a.product.oldPrice)
+      );
     }
-    return 0;
+    this.sortedProductsSubject.next(
+      this.sortedProducts.slice(startIndex, endIndex)
+    );
+  }
+
+  private calculateDiscount(price: number, oldPrice: number): number {
+    return Math.round(((oldPrice - price) / oldPrice) * 100);
+  }
+
+  public async getTotalProducts(): Promise<number> {
+    return this.sortedProducts.length;
   }
 
   public async extractProducts(
     startIndex: number,
     endIndex: number
-  ): Promise<{ supermarket: string; product: Product }[]> {
+  ): Promise<void> {
     const CACHE_VALIDITY_MINUTES = 60;
     const isCacheValid = await this.indexedDBService.isCacheValid(
       'softDrinks',
@@ -59,10 +88,12 @@ export class SoftDrinksService {
         'softDrinks'
       );
       if (cachedProducts) {
-        const filteredProducts = this.filterDrinksProducts(cachedProducts);
-        return filteredProducts.slice(startIndex, endIndex);
+        this.sortedProducts = this.filterDrinksProducts(cachedProducts);
+        this.sortProducts();
+        this.sortedProductsSubject.next(
+          this.sortedProducts.slice(startIndex, endIndex)
+        );
       }
-      return [];
     } else {
       console.log('Making API call');
       const products = await firstValueFrom(
@@ -74,8 +105,11 @@ export class SoftDrinksService {
       const timestamp = new Date();
       await this.indexedDBService.setLastUpdated('softDrinks', timestamp);
 
-      const filteredProducts = this.filterDrinksProducts(products);
-      return filteredProducts.slice(startIndex, endIndex);
+      this.sortedProducts = this.filterDrinksProducts(products);
+      this.sortProducts();
+      this.sortedProductsSubject.next(
+        this.sortedProducts.slice(startIndex, endIndex)
+      );
     }
   }
 
