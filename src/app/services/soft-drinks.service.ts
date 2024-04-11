@@ -19,13 +19,6 @@ export interface Supermarket {
   products: Product[];
 }
 
-export type Supermarkets =
-  | 'Lidl'
-  | 'Kaufland'
-  | 'T-Market'
-  | 'Fantastico'
-  | 'Billa';
-
 import { IndexedDBService } from './indexed-db.service';
 
 import { firstValueFrom } from 'rxjs';
@@ -135,7 +128,7 @@ export class SoftDrinksService {
     let supermarketsToShow;
     if (includedSupermarkets?.length) {
       supermarketsToShow = supermarkets.filter((supermarket) =>
-        includedSupermarkets?.includes(supermarket.supermarket as Supermarkets)
+        includedSupermarkets?.includes(supermarket.supermarket)
       );
     } else {
       supermarketsToShow = supermarkets;

@@ -72,6 +72,8 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
 
   public async fetchImageUrl(productName: string): Promise<string> {
     const cachedUrl = await this.indexedDBService.getImageUrl(productName);
+    const fallbackUrl =
+      'https://mysupermarket.bg/_next/static/media/default-product-thumbnail.76adf62e.png';
     if (cachedUrl) {
       return cachedUrl;
     } else {
@@ -80,7 +82,8 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
         await this.indexedDBService.setImageUrl(productName, url);
         return url;
       } else {
-        throw new Error(`Image URL not found for product: ${productName}`);
+        await this.indexedDBService.setImageUrl(productName, fallbackUrl);
+        return fallbackUrl;
       }
     }
   }
