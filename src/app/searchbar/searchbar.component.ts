@@ -11,12 +11,12 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './searchbar.component.scss',
 })
 export class SearchbarComponent {
-  searchTerm: string = '';
+  public searchTerm: string = '';
+  public searchPlaceHolder = $localize`:@@searchPlaceHolder: Search...`;
 
   constructor() {}
 
-  onSearch() {
-    // Implement your search logic here
+  public onSearch() {
     console.log('Searching for:', this.searchTerm);
   }
 }

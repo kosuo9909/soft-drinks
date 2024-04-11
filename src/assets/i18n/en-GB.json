@@ -1,6 +1,7 @@
 {
   "locale": "en-GB",
   "translations": {
+    "searchPlaceHolder": " Search...",
     "softDrinksTitle": "Soft drinks",
     "loadingDrinks": " Loading soft drinks... ",
     "sortByPrice": " Sort by Lowest Price ",

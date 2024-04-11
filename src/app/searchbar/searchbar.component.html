@@ -1,5 +1,5 @@
 <div class="search-container">
-    <input type="text" class="search-input" placeholder="Search..." [(ngModel)]="searchTerm">
+    <input type="text" class="search-input" [placeholder]="searchPlaceHolder" [(ngModel)]="searchTerm">
     <button class="search-button" (click)="onSearch()">
         <mat-icon>search</mat-icon>
     </button>

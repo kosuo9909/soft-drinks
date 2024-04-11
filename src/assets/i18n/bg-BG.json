@@ -1,6 +1,7 @@
 {
   "locale": "bg",
   "translations": {
+    "searchPlaceHolder": " Какво търсиш днес?",
     "softDrinksTitle": "Газирани напитки",
     "loadingDrinks": " Зареждане на газирани безалкохолни напитки... ",
     "sortBy": "Сортиране по",
