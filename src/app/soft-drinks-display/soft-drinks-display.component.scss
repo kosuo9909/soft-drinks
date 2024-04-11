@@ -6,6 +6,12 @@
   padding: 20px;
   background-color: $color-background-base;
 
+  .filter-supermarkets-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   h2 {
     font-size: 36px;
     color: $color-primary;

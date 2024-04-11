@@ -30,6 +30,11 @@
       </button>
     </mat-menu>
   </div>
+
+  <div class="filter-supermarkets-container">
+    <app-filter-supermarkets [startIndex]="startIndex" [endIndex]="endIndex" />
+  </div>
+
   <div *ngIf="softDrinks.length > 0" class="soft-drinks-list">
     <ng-container *ngFor="let item of softDrinks">
       <div *ngIf="item.product.oldPrice" class="soft-drink-item">

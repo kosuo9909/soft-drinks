@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { FilterSupermarketsComponent } from '../filter-supermarkets/filter-supermarkets.component';
 @Component({
   selector: 'app-soft-drinks-display',
   standalone: true,
@@ -22,6 +23,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
     MatMenuModule,
     MatButtonModule,
     MatPaginatorModule,
+    FilterSupermarketsComponent,
   ],
   templateUrl: './soft-drinks-display.component.html',
   styleUrls: ['./soft-drinks-display.component.scss'],
@@ -35,8 +37,8 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
   public pageSize = 10;
   public pageSizeOptions = [10, 25, 50];
   public currentPage = 0;
-  private startIndex = this.currentPage * this.pageSize;
-  private endIndex = this.startIndex + this.pageSize;
+  public startIndex = this.currentPage * this.pageSize;
+  public endIndex = this.startIndex + this.pageSize;
 
   public languageNames: { [key: string]: string } = {
     'en-GB': 'Български',
@@ -51,7 +53,6 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
   public async switchLanguage() {
     const newLanguage = this.currentLanguage === 'en-GB' ? 'bg-BG' : 'en-GB';
     setLocale(newLanguage, localStorage);
-    console.log('Changing language to:', newLanguage);
     this.currentLanguage = newLanguage;
     location.reload();
   }
@@ -87,6 +88,9 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
   public async onPageChange(event: PageEvent): Promise<void> {
     this.currentPage = event.pageIndex;
     this.pageSize = event.pageSize;
+    this.startIndex = this.currentPage * this.pageSize;
+    this.endIndex = this.startIndex + this.pageSize;
+
     await this.loadSoftDrinks();
   }
 
@@ -125,8 +129,6 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
     );
     await this.loadSoftDrinks();
     this.softDrinks.forEach((item) => {
-      console.log(item.product, item.product.picUrl);
-
       if (!item.product.picUrl) {
         this.fetchImageUrl(item.product.name)
           .then((url) => {

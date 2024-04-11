@@ -19,6 +19,13 @@ export interface Supermarket {
   products: Product[];
 }
 
+export type Supermarkets =
+  | 'Lidl'
+  | 'Kaufland'
+  | 'T-Market'
+  | 'Fantastico'
+  | 'Billa';
+
 import { IndexedDBService } from './indexed-db.service';
 
 import { firstValueFrom } from 'rxjs';
@@ -74,7 +81,8 @@ export class SoftDrinksService {
 
   public async extractProducts(
     startIndex: number,
-    endIndex: number
+    endIndex: number,
+    includedSupermarkets?: string[]
   ): Promise<void> {
     const CACHE_VALIDITY_MINUTES = 60;
     const isCacheValid = await this.indexedDBService.isCacheValid(
@@ -88,7 +96,10 @@ export class SoftDrinksService {
         'softDrinks'
       );
       if (cachedProducts) {
-        this.sortedProducts = this.filterDrinksProducts(cachedProducts);
+        this.sortedProducts = this.filterDrinksProducts(
+          cachedProducts,
+          includedSupermarkets
+        );
         this.sortProducts();
         this.sortedProductsSubject.next(
           this.sortedProducts.slice(startIndex, endIndex)
@@ -105,7 +116,10 @@ export class SoftDrinksService {
       const timestamp = new Date();
       await this.indexedDBService.setLastUpdated('softDrinks', timestamp);
 
-      this.sortedProducts = this.filterDrinksProducts(products);
+      this.sortedProducts = this.filterDrinksProducts(
+        products,
+        includedSupermarkets
+      );
       this.sortProducts();
       this.sortedProductsSubject.next(
         this.sortedProducts.slice(startIndex, endIndex)
@@ -114,11 +128,19 @@ export class SoftDrinksService {
   }
 
   private filterDrinksProducts(
-    supermarkets: Supermarket[]
+    supermarkets: Supermarket[],
+    includedSupermarkets?: string[]
   ): { supermarket: string; product: Product }[] {
     const drinksProducts: { supermarket: string; product: Product }[] = [];
-
-    supermarkets.forEach((supermarket: Supermarket) => {
+    let supermarketsToShow;
+    if (includedSupermarkets?.length) {
+      supermarketsToShow = supermarkets.filter((supermarket) =>
+        includedSupermarkets?.includes(supermarket.supermarket as Supermarkets)
+      );
+    } else {
+      supermarketsToShow = supermarkets;
+    }
+    supermarketsToShow.forEach((supermarket: Supermarket) => {
       const filteredProducts = supermarket.products.filter(
         (product: Product) =>
           product.name.includes('Газирана') && product.oldPrice

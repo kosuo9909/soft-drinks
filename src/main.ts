@@ -18,10 +18,7 @@ Promise.all([fetch(`/assets/i18n/${locale}.json`), importLocale(locale)])
       throw new Error(`HTTP error ${responses[0].status}`);
     }
 
-    console.log('Translation file loaded:', responses[0]);
     const moduleLocale = responses[1].default[0];
-    console.log('moduleLocale is', moduleLocale);
-    console.log('third thing is', responses);
 
     registerLocaleData(responses[1].default, moduleLocale);
 
@@ -29,7 +26,6 @@ Promise.all([fetch(`/assets/i18n/${locale}.json`), importLocale(locale)])
   })
   .then((result) => {
     loadTranslations(result.translations);
-    console.log('translations loaded w/ result', result);
 
     bootstrapApplication(AppComponent, appConfig).catch((err) =>
       console.error(err)
