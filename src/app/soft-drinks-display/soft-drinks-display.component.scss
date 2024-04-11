@@ -6,10 +6,11 @@
   padding: 20px;
   background-color: $color-background-base;
 
-  .filter-supermarkets-container {
+  .centered-div {
     display: flex;
     align-items: center;
     justify-content: center;
+    justify-self: center;
   }
 
   h2 {
@@ -20,11 +21,18 @@
 
   .sorting-options {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
+    gap: 50px;
     margin-bottom: 20px;
 
     mat-select {
       color: $color-primary;
+    }
+
+    app-searchbar {
+      flex: 1;
+      margin: 0 auto; 
     }
 
     button {

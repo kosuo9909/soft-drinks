@@ -6,32 +6,39 @@
   </div>
 
   <div class="sorting-options">
-    <mat-form-field>
-      <mat-label i18n="@@sortBy">Sort by</mat-label>
-      <mat-select
-        disableRipple
-        [(value)]="selectedSortOption"
-        (selectionChange)="sortBy($event.value)"
+    <app-searchbar />
+    <div class='sorting-group'>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label i18n="@@sortBy">Sort by</mat-label>
+        <mat-select
+          disableRipple
+          [(value)]="selectedSortOption"
+          (selectionChange)="sortBy($event.value)"
+        >
+          <mat-option [value]="'price'" i18n="@@sortByPrice"
+            >Sort by Lowest Price</mat-option
+          >
+          <mat-option [value]="'discount'" i18n="@@sortyByDiscount"
+            >Sort by Highest Discount</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+      <button
+        mat-stroked-button
+        [matMenuTriggerFor]="language"
+        i18n="@@language"
       >
-        <mat-option [value]="'price'" i18n="@@sortByPrice"
-          >Sort by Lowest Price</mat-option
-        >
-        <mat-option [value]="'discount'" i18n="@@sortyByDiscount"
-          >Sort by Highest Discount</mat-option
-        >
-      </mat-select>
-    </mat-form-field>
-    <button mat-stroked-button [matMenuTriggerFor]="language" i18n="@@language">
-      <mat-icon>language</mat-icon>Language
-    </button>
-    <mat-menu #language="matMenu">
-      <button mat-flat-button style="width: 100%" (click)="switchLanguage()">
-        {{ languageNames[currentLanguage] }}
+        <mat-icon>language</mat-icon>Language
       </button>
-    </mat-menu>
+      <mat-menu #language="matMenu">
+        <button mat-flat-button style="width: 100%" (click)="switchLanguage()">
+          {{ languageNames[currentLanguage] }}
+        </button>
+      </mat-menu>
+    </div>
   </div>
 
-  <div class="filter-supermarkets-container">
+  <div class="centered-div">
     <app-filter-supermarkets [startIndex]="startIndex" [endIndex]="endIndex" />
   </div>
 

@@ -12,6 +12,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { FilterSupermarketsComponent } from '../filter-supermarkets/filter-supermarkets.component';
+import { SearchbarComponent } from '../searchbar/searchbar.component';
 @Component({
   selector: 'app-soft-drinks-display',
   standalone: true,
@@ -24,6 +25,7 @@ import { FilterSupermarketsComponent } from '../filter-supermarkets/filter-super
     MatButtonModule,
     MatPaginatorModule,
     FilterSupermarketsComponent,
+    SearchbarComponent,
   ],
   templateUrl: './soft-drinks-display.component.html',
   styleUrls: ['./soft-drinks-display.component.scss'],
@@ -70,7 +72,7 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
     this.selectedSortOption = option;
   }
 
-  public async fetchImageUrl(productName: string): Promise<string> {
+  private async fetchImageUrl(productName: string): Promise<string> {
     const cachedUrl = await this.indexedDBService.getImageUrl(productName);
     const fallbackUrl =
       'https://mysupermarket.bg/_next/static/media/default-product-thumbnail.76adf62e.png';
