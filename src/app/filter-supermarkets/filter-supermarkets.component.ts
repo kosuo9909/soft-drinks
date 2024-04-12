@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SoftDrinksService } from '../services/soft-drinks.service';
+import { DataSharingService, Supermarkets } from '../dataSharing.service';
 
 @Component({
   selector: 'app-filter-supermarkets',
@@ -45,7 +46,7 @@ export class FilterSupermarketsComponent {
     },
   ];
 
-  constructor(private softdrinksService: SoftDrinksService) {}
+  constructor(private dataSharingService: DataSharingService) {}
 
   public activateLogo(index: number): void {
     this.logos[index].active = !this.logos[index].active;
@@ -55,13 +56,10 @@ export class FilterSupermarketsComponent {
   private applyFilters(): void {
     const activeSupermarkets = this.logos
       .filter((logo) => logo.active)
-      .map((logo) => logo.name);
+      .map((logo) => logo.name as Supermarkets);
 
-    this.softdrinksService.extractProducts(
-      this.startIndex,
-      this.endIndex,
-      activeSupermarkets
-    );
+    this.dataSharingService.setShopsToInclude(activeSupermarkets);
+    this.dataSharingService.setStartEndPaginationIndices([0, 10]);
   }
 
   public hoverLogo(index: number, isHovering: boolean): void {

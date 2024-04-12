@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
 
 export interface Product {
   name: string;
@@ -22,15 +21,13 @@ export interface Supermarket {
 import { IndexedDBService } from './indexed-db.service';
 
 import { firstValueFrom } from 'rxjs';
+import { DataSharingService, Supermarkets } from '../dataSharing.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SoftDrinksService {
-  constructor(
-    private http: HttpClient,
-    private indexedDBService: IndexedDBService
-  ) {}
+  private _ngUnsubscribe: Subject<void> = new Subject<void>();
 
   private sortedProductsSubject = new BehaviorSubject<
     { supermarket: string; product: Product }[]
@@ -39,6 +36,63 @@ export class SoftDrinksService {
 
   private sortedProducts: { supermarket: string; product: Product }[] = [];
   private selectedSortOption: 'price' | 'discount' = 'price';
+  private shopsToInclude: Supermarkets[] = [];
+  private searchTerm: string = '';
+  private startEndPaginationIndices = [0, 10];
+
+  private startIndex: number = 0;
+  private endIndex: number = 10;
+
+  constructor(
+    private http: HttpClient,
+    private indexedDBService: IndexedDBService,
+    private dataSharingService: DataSharingService
+  ) {
+    this.listenToDataSharingService();
+  }
+
+  private listenToDataSharingService(): void {
+    this.dataSharingService
+      .getSelectedSortOption()
+      .pipe(takeUntil(this._ngUnsubscribe))
+      .subscribe((selectedOption) => {
+        this.selectedSortOption = selectedOption;
+        this.extractProducts();
+        console.log('Selected Sort Option:', selectedOption);
+      });
+
+    this.dataSharingService
+      .getShopsToInclude()
+      .pipe(takeUntil(this._ngUnsubscribe))
+      .subscribe((shops) => {
+        this.shopsToInclude = shops;
+        this.extractProducts();
+        console.log('Shops to Include:', shops);
+      });
+
+    this.dataSharingService
+      .getSearchTerm()
+      .pipe(takeUntil(this._ngUnsubscribe))
+      .subscribe((term) => {
+        this.searchTerm = term;
+        console.log('Search Term:', term);
+        this.extractProducts();
+      });
+
+    this.dataSharingService
+      .getStartEndPaginationIndices()
+      .pipe(takeUntil(this._ngUnsubscribe))
+      .subscribe((indices) => {
+        this.startEndPaginationIndices = indices;
+        this.extractProducts();
+        console.log('Pagination Indices:', indices);
+      });
+  }
+
+  public cleanup(): void {
+    this._ngUnsubscribe.next();
+    this._ngUnsubscribe.complete();
+  }
 
   public setSortOption(
     option: 'price' | 'discount',
@@ -68,15 +122,11 @@ export class SoftDrinksService {
     return Math.round(((oldPrice - price) / oldPrice) * 100);
   }
 
-  public async getTotalProducts(): Promise<number> {
+  public getTotalProducts(): number {
     return this.sortedProducts.length;
   }
 
-  public async extractProducts(
-    startIndex: number,
-    endIndex: number,
-    includedSupermarkets?: string[]
-  ): Promise<void> {
+  public async extractProducts(): Promise<void> {
     const CACHE_VALIDITY_MINUTES = 60;
     const isCacheValid = await this.indexedDBService.isCacheValid(
       'softDrinks',
@@ -91,11 +141,12 @@ export class SoftDrinksService {
       if (cachedProducts) {
         this.sortedProducts = this.filterDrinksProducts(
           cachedProducts,
-          includedSupermarkets
+          this.shopsToInclude,
+          this.searchTerm
         );
         this.sortProducts();
         this.sortedProductsSubject.next(
-          this.sortedProducts.slice(startIndex, endIndex)
+          this.sortedProducts.slice(...this.startEndPaginationIndices)
         );
       }
     } else {
@@ -111,18 +162,20 @@ export class SoftDrinksService {
 
       this.sortedProducts = this.filterDrinksProducts(
         products,
-        includedSupermarkets
+        this.shopsToInclude,
+        this.searchTerm
       );
       this.sortProducts();
       this.sortedProductsSubject.next(
-        this.sortedProducts.slice(startIndex, endIndex)
+        this.sortedProducts.slice(...this.startEndPaginationIndices)
       );
     }
   }
 
   private filterDrinksProducts(
     supermarkets: Supermarket[],
-    includedSupermarkets?: string[]
+    includedSupermarkets?: string[],
+    searchKeyword: string = 'Газирана'
   ): { supermarket: string; product: Product }[] {
     const drinksProducts: { supermarket: string; product: Product }[] = [];
     let supermarketsToShow;
@@ -136,7 +189,8 @@ export class SoftDrinksService {
     supermarketsToShow.forEach((supermarket: Supermarket) => {
       const filteredProducts = supermarket.products.filter(
         (product: Product) =>
-          product.name.includes('Газирана') && product.oldPrice
+          product.name.toLowerCase().includes(searchKeyword.toLowerCase()) &&
+          product.oldPrice
       );
 
       filteredProducts.forEach((product: Product) => {

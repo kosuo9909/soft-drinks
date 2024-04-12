@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { SoftDrinksService } from '../services/soft-drinks.service';
+import { DataSharingService } from '../dataSharing.service';
 
 @Component({
   selector: 'app-searchbar',
@@ -14,9 +16,10 @@ export class SearchbarComponent {
   public searchTerm: string = '';
   public searchPlaceHolder = $localize`:@@searchPlaceHolder: Search...`;
 
-  constructor() {}
+  constructor(private searchBarService: DataSharingService) {}
 
   public onSearch() {
     console.log('Searching for:', this.searchTerm);
+    this.searchBarService.setSearchTerm(this.searchTerm);
   }
 }

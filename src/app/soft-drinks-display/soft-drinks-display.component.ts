@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { FilterSupermarketsComponent } from '../filter-supermarkets/filter-supermarkets.component';
 import { SearchbarComponent } from '../searchbar/searchbar.component';
+import { DataSharingService } from '../dataSharing.service';
 @Component({
   selector: 'app-soft-drinks-display',
   standalone: true,
@@ -39,8 +40,6 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
   public pageSize = 10;
   public pageSizeOptions = [10, 25, 50];
   public currentPage = 0;
-  public startIndex = this.currentPage * this.pageSize;
-  public endIndex = this.startIndex + this.pageSize;
 
   public languageNames: { [key: string]: string } = {
     'en-GB': 'Български',
@@ -49,7 +48,8 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
 
   constructor(
     private softDrinksService: SoftDrinksService,
-    private indexedDBService: IndexedDBService
+    private indexedDBService: IndexedDBService,
+    private dataSharingService: DataSharingService
   ) {}
 
   public async switchLanguage() {
@@ -64,12 +64,8 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
   }
 
   public sortBy(option: 'price' | 'discount'): void {
-    this.softDrinksService.setSortOption(
-      option,
-      this.startIndex,
-      this.endIndex
-    );
     this.selectedSortOption = option;
+    this.dataSharingService.setSelectedSortOption(this.selectedSortOption);
   }
 
   private async fetchImageUrl(productName: string): Promise<string> {
@@ -93,18 +89,15 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
   public async onPageChange(event: PageEvent): Promise<void> {
     this.currentPage = event.pageIndex;
     this.pageSize = event.pageSize;
-    this.startIndex = this.currentPage * this.pageSize;
-    this.endIndex = this.startIndex + this.pageSize;
-
-    await this.loadSoftDrinks();
+    const startIndex = this.currentPage * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.dataSharingService.setStartEndPaginationIndices([
+      startIndex,
+      endIndex,
+    ]);
   }
 
-  private async loadSoftDrinks(): Promise<void> {
-    await this.softDrinksService.extractProducts(
-      this.startIndex,
-      this.endIndex
-    );
-
+  private async getTotalProductsCountPerRequest(): Promise<void> {
     this.totalItems = await this.softDrinksService.getTotalProducts();
   }
 
@@ -125,14 +118,11 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
         });
 
         this.softDrinks = products;
+
+        this.getTotalProductsCountPerRequest();
       });
+
     this.currentLanguage = getLocale();
-    this.softDrinksService.setSortOption(
-      this.selectedSortOption,
-      this.startIndex,
-      this.endIndex
-    );
-    await this.loadSoftDrinks();
     this.softDrinks.forEach((item) => {
       if (!item.product.picUrl) {
         this.fetchImageUrl(item.product.name)
