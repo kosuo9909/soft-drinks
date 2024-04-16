@@ -1,11 +1,10 @@
 <div class="filter-bar">
-    <div *ngFor="let logo of logos; let i = index" 
+    <div *ngFor="let logo of logos | keyvalue" 
          class="logo-container" 
-         [class.active]="logo.active" 
-         (click)="activateLogo(i)" 
-         (mouseover)="hoverLogo(i, true)" 
-         (mouseleave)="hoverLogo(i, false)">
-      <img [src]="logo.src" [alt]="logo.name" [class.hover]="logo.hover">
+         [class.active]="logo.value.active" 
+         (click)="activateLogo(logo.key)" 
+         >
+      <img [src]="logo.value.src" [alt]="logo.value.name" >
     </div>
   </div>
 

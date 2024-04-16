@@ -52,7 +52,7 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
     private dataSharingService: DataSharingService
   ) {}
 
-  public async switchLanguage() {
+  public switchLanguage() {
     const newLanguage = this.currentLanguage === 'en-GB' ? 'bg-BG' : 'en-GB';
     setLocale(newLanguage, localStorage);
     this.currentLanguage = newLanguage;

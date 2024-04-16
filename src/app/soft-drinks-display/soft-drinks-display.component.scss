@@ -62,6 +62,7 @@
       text-align: center;
       position: relative;
       overflow: hidden;
+      height: 100%;
 
       .ribbon {
         position: absolute;
@@ -143,6 +144,8 @@
         }
 
         .product-validity {
+          // position: absolute;
+          // bottom: 0;
           font-size: 14px;
           color: $color-text-quaternary;
         }
