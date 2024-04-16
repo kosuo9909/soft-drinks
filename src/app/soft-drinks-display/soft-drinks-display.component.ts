@@ -2,7 +2,16 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Product, SoftDrinksService } from '../services/soft-drinks.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Subject, takeUntil } from 'rxjs';
+import {
+  Subject,
+  catchError,
+  forkJoin,
+  from,
+  map,
+  mergeMap,
+  of,
+  takeUntil,
+} from 'rxjs';
 import { IndexedDBService } from '../services/indexed-db.service';
 import { getLocale, setLocale } from '../../locale/i18n';
 import { productMappings } from '../../assets/productMappingsMock';
@@ -103,25 +112,32 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
 
   public async ngOnInit() {
     this.softDrinksService.sortedProducts$
-      .pipe(takeUntil(this._ngUnsubscribe))
+      .pipe(
+        takeUntil(this._ngUnsubscribe),
+        mergeMap((products) => {
+          const imageRequests = products.map((item) => {
+            if (!item.product.picUrl) {
+              return from(this.fetchImageUrl(item.product.name)).pipe(
+                map((picUrl) => {
+                  item.product.picUrl = picUrl;
+                  return item;
+                }),
+                catchError((error) => {
+                  console.error(error);
+                  return of(item);
+                })
+              );
+            } else {
+              return of(item);
+            }
+          });
+          return forkJoin(imageRequests);
+        })
+      )
       .subscribe((products) => {
-        products.forEach((item) => {
-          if (!item.product.picUrl) {
-            this.fetchImageUrl(item.product.name)
-              .then((url) => {
-                item.product.picUrl = url;
-              })
-              .catch((error) => {
-                console.error('Error fetching the image:', error);
-              });
-          }
-        });
-
         this.softDrinks = products;
-
         this.getTotalProductsCountPerRequest();
       });
-
     this.currentLanguage = getLocale();
     this.softDrinks.forEach((item) => {
       if (!item.product.picUrl) {
