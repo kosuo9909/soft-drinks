@@ -60,9 +60,7 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
     private softDrinksService: SoftDrinksService,
     private indexedDBService: IndexedDBService,
     private dataSharingService: DataSharingService
-  ) {
-    this.isLoading = this.softDrinksService.isLoadingData;
-  }
+  ) {}
 
   public switchLanguage() {
     const newLanguage = this.currentLanguage === 'en-GB' ? 'bg-BG' : 'en-GB';
