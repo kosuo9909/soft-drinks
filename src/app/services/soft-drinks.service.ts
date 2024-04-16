@@ -1,6 +1,9 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { IndexedDBService } from './indexed-db.service';
+import { firstValueFrom } from 'rxjs';
+import { DataSharingService, Supermarkets } from '../dataSharing.service';
 
 export interface Product {
   name: string;
@@ -18,30 +21,21 @@ export interface Supermarket {
   products: Product[];
 }
 
-import { IndexedDBService } from './indexed-db.service';
-
-import { firstValueFrom } from 'rxjs';
-import { DataSharingService, Supermarkets } from '../dataSharing.service';
-
 @Injectable({
   providedIn: 'root',
 })
 export class SoftDrinksService {
   private _ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  private sortedProductsSubject = new BehaviorSubject<
+  public sortedProducts$ = new BehaviorSubject<
     { supermarket: string; product: Product }[]
   >([]);
-  public sortedProducts$ = this.sortedProductsSubject.asObservable();
 
   private sortedProducts: { supermarket: string; product: Product }[] = [];
   private selectedSortOption: 'price' | 'discount' = 'price';
   private shopsToInclude: Supermarkets[] = [];
   private searchTerm: string = '';
   private startEndPaginationIndices = [0, 10];
-
-  private startIndex: number = 0;
-  private endIndex: number = 10;
 
   constructor(
     private http: HttpClient,
@@ -113,9 +107,7 @@ export class SoftDrinksService {
           this.calculateDiscount(a.product.price, a.product.oldPrice)
       );
     }
-    this.sortedProductsSubject.next(
-      this.sortedProducts.slice(startIndex, endIndex)
-    );
+    this.sortedProducts$.next(this.sortedProducts.slice(startIndex, endIndex));
   }
 
   private calculateDiscount(price: number, oldPrice: number): number {
@@ -145,7 +137,7 @@ export class SoftDrinksService {
           this.searchTerm
         );
         this.sortProducts();
-        this.sortedProductsSubject.next(
+        this.sortedProducts$.next(
           this.sortedProducts.slice(...this.startEndPaginationIndices)
         );
       }
@@ -166,7 +158,7 @@ export class SoftDrinksService {
         this.searchTerm
       );
       this.sortProducts();
-      this.sortedProductsSubject.next(
+      this.sortedProducts$.next(
         this.sortedProducts.slice(...this.startEndPaginationIndices)
       );
     }
