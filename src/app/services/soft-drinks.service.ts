@@ -28,7 +28,7 @@ export class SoftDrinksService {
   private _ngUnsubscribe: Subject<void> = new Subject<void>();
 
   public sortedProducts$ = new BehaviorSubject<
-    { supermarket: string; product: Product }[]
+    { supermarket: string; product: Product }[] | []
   >([]);
 
   private sortedProducts: { supermarket: string; product: Product }[] = [];
@@ -36,6 +36,8 @@ export class SoftDrinksService {
   private shopsToInclude: Supermarkets[] = [];
   private searchTerm: string = '';
   private startEndPaginationIndices = [0, 10];
+
+  public isLoadingData = false;
 
   constructor(
     private http: HttpClient,
@@ -70,6 +72,7 @@ export class SoftDrinksService {
       .subscribe((term) => {
         this.searchTerm = term;
         console.log('Search Term:', term);
+        this.isLoadingData = true;
         this.extractProducts();
       });
 
@@ -124,6 +127,7 @@ export class SoftDrinksService {
       'softDrinks',
       CACHE_VALIDITY_MINUTES
     );
+    this.dataSharingService.setIsDataLoading(true);
 
     if (isCacheValid) {
       console.log('Retrieved from cache');
@@ -137,6 +141,7 @@ export class SoftDrinksService {
           this.searchTerm
         );
         this.sortProducts();
+
         this.sortedProducts$.next(
           this.sortedProducts.slice(...this.startEndPaginationIndices)
         );
@@ -158,10 +163,13 @@ export class SoftDrinksService {
         this.searchTerm
       );
       this.sortProducts();
+
       this.sortedProducts$.next(
         this.sortedProducts.slice(...this.startEndPaginationIndices)
       );
     }
+
+    this.dataSharingService.setIsDataLoading(false);
   }
 
   private filterDrinksProducts(
@@ -179,13 +187,13 @@ export class SoftDrinksService {
       supermarketsToShow = supermarkets;
     }
     supermarketsToShow.forEach((supermarket: Supermarket) => {
-      const filteredProducts = supermarket.products.filter(
+      const foundProducts = supermarket.products.filter(
         (product: Product) =>
           product.name.toLowerCase().includes(searchKeyword.toLowerCase()) &&
           product.oldPrice
       );
 
-      filteredProducts.forEach((product: Product) => {
+      foundProducts.forEach((product: Product) => {
         const productExists = drinksProducts.find(
           (drinkProduct) =>
             drinkProduct.supermarket === supermarket.supermarket &&

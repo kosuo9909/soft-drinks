@@ -20,8 +20,17 @@ export class DataSharingService {
   private startEndPaginationIndices = new BehaviorSubject<[number, number]>([
     0, 10,
   ]);
+  private isDataLoading = new BehaviorSubject<boolean>(false);
 
   constructor() {}
+
+  public setIsDataLoading(isLoading: boolean) {
+    this.isDataLoading.next(isLoading);
+  }
+
+  public getisDataLoading() {
+    return this.isDataLoading;
+  }
 
   public setSearchTerm(term: string) {
     this.searchTerm.next(term);

@@ -49,6 +49,7 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
   public pageSize = 10;
   public pageSizeOptions = [10, 25, 50];
   public currentPage = 0;
+  public isLoading: boolean = true;
 
   public languageNames: { [key: string]: string } = {
     'en-GB': 'Български',
@@ -59,7 +60,9 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
     private softDrinksService: SoftDrinksService,
     private indexedDBService: IndexedDBService,
     private dataSharingService: DataSharingService
-  ) {}
+  ) {
+    this.isLoading = this.softDrinksService.isLoadingData;
+  }
 
   public switchLanguage() {
     const newLanguage = this.currentLanguage === 'en-GB' ? 'bg-BG' : 'en-GB';
@@ -111,10 +114,17 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit() {
+    this.dataSharingService
+      .getisDataLoading()
+      .pipe(takeUntil(this._ngUnsubscribe))
+      .subscribe((value) => (this.isLoading = value));
     this.softDrinksService.sortedProducts$
       .pipe(
         takeUntil(this._ngUnsubscribe),
         mergeMap((products) => {
+          if (products.length === 0) {
+            return of([]);
+          }
           const imageRequests = products.map((item) => {
             if (!item.product.picUrl) {
               return from(this.fetchImageUrl(item.product.name)).pipe(
@@ -138,6 +148,7 @@ export class SoftDrinksDisplayComponent implements OnInit, OnDestroy {
         this.softDrinks = products;
         this.getTotalProductsCountPerRequest();
       });
+
     this.currentLanguage = getLocale();
     this.softDrinks.forEach((item) => {
       if (!item.product.picUrl) {
