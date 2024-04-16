@@ -37,8 +37,6 @@ export class SoftDrinksService {
   private searchTerm: string = '';
   private startEndPaginationIndices = [0, 10];
 
-  public isLoadingData = false;
-
   constructor(
     private http: HttpClient,
     private indexedDBService: IndexedDBService,
@@ -72,7 +70,6 @@ export class SoftDrinksService {
       .subscribe((term) => {
         this.searchTerm = term;
         console.log('Search Term:', term);
-        this.isLoadingData = true;
         this.extractProducts();
       });
 
