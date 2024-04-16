@@ -16,8 +16,6 @@ interface LogoStructure {
   styleUrl: './filter-supermarkets.component.scss',
 })
 export class FilterSupermarketsComponent {
-  @Input() startIndex: number = 0;
-  @Input() endIndex: number = 10;
   logos: { [key: string]: LogoStructure } = {
     Billa: {
       name: 'Billa',
