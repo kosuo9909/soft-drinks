@@ -12,7 +12,12 @@ import { getLocale, importLocale, setLocale } from '../src/locale/i18n';
 const locale = getLocale();
 setLocale(locale, sessionStorage);
 
-Promise.all([fetch(`/assets/i18n/${locale}.json`), importLocale(locale)])
+const cacheBuster = Date.now();
+
+Promise.all([
+  fetch(`/assets/i18n/${locale}.json?v=${cacheBuster}`),
+  importLocale(locale),
+])
   .then((responses) => {
     if (!responses[0].ok) {
       throw new Error(`HTTP error ${responses[0].status}`);
