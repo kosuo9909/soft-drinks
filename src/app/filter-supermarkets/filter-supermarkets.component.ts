@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { DataSharingService, Supermarkets } from '../dataSharing.service';
+import {
+  DataSharingService,
+  Supermarkets,
+} from '../services/dataSharing.service';
 
 interface LogoStructure {
   name: string;

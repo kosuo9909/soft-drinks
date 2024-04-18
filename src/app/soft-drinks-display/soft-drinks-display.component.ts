@@ -22,7 +22,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { FilterSupermarketsComponent } from '../filter-supermarkets/filter-supermarkets.component';
 import { SearchbarComponent } from '../searchbar/searchbar.component';
-import { DataSharingService } from '../dataSharing.service';
+import { DataSharingService } from '../services/dataSharing.service';
 @Component({
   selector: 'app-soft-drinks-display',
   standalone: true,

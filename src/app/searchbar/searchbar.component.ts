@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { SoftDrinksService } from '../services/soft-drinks.service';
-import { DataSharingService } from '../dataSharing.service';
+import { DataSharingService } from '../services/dataSharing.service';
 
 @Component({
   selector: 'app-searchbar',

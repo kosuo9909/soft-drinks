@@ -1,0 +1,49 @@
+@use '@angular/material' as mat;
+@use './app/soft-drinks-display/_soft-drinks-display-component-theme.scss' as softDrinks;
+
+$my-primary-color: (
+  50: #FFFFED,
+  100: #FFFFDB,
+  200: #FFFFC8,
+  300: #FFFFB6,
+  400: #FFFFA3,
+  500: #FFFF91,
+  600: #FFFF7E,
+  700: #FFFF6C,
+  800: #FFFF59,
+  900: #FFFF47,
+  A100: #FFFFFF,
+  A200: #FFFFFF,
+  A400: #FFFFD1,
+  A700: #FFFFB8,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: rgba(black, 0.87),
+    500: rgba(black, 0.87),
+    600: rgba(black, 0.87),
+    700: rgba(black, 0.87),
+    800: rgba(black, 0.87),
+    900: rgba(black, 0.87),
+    A100: rgba(black, 0.87),
+    A200: rgba(black, 0.87),
+    A400: rgba(black, 0.87),
+    A700: rgba(black, 0.87),
+  )
+);
+
+$my-primary: mat.define-palette($my-primary-color);
+$my-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$my-warn: mat.define-palette(mat.$red-palette);
+
+$my-theme: mat.define-light-theme((
+  color: (
+    primary: $my-primary,
+    accent: $my-accent,
+    warn: $my-warn
+  )
+));
+
+@include softDrinks.color($my-theme);

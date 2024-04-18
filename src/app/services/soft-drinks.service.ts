@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { IndexedDBService } from './indexed-db.service';
 import { firstValueFrom } from 'rxjs';
-import { DataSharingService, Supermarkets } from '../dataSharing.service';
+import { DataSharingService, Supermarkets } from './dataSharing.service';
 
 export interface Product {
   name: string;
