@@ -39,3 +39,20 @@ export function importLocale(locale: Locale) {
 
   return importLocalePromise;
 }
+
+export function importTranslation(locale: Locale) {
+  let importTranslationPromise;
+  switch (locale) {
+    case 'bg-BG':
+      importTranslationPromise = import('../i18n/bg-BG.json');
+      break;
+    case 'en-GB':
+      importTranslationPromise = import('../i18n/en-GB.json');
+      break;
+    default:
+      importTranslationPromise = import('../i18n/en-GB.json');
+      break;
+  }
+
+  return importTranslationPromise;
+}
