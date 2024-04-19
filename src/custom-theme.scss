@@ -1,5 +1,6 @@
 @use '@angular/material' as mat;
 @use './app/soft-drinks-display/_soft-drinks-display-component-theme.scss' as softDrinks;
+@use 'sass:map';
 
 $my-primary-color: (
   50: #FFFFED,
@@ -42,8 +43,29 @@ $my-theme: mat.define-light-theme((
   color: (
     primary: $my-primary,
     accent: $my-accent,
-    warn: $my-warn
-  )
+    warn: $my-warn,
+  ),
 ));
 
-@include softDrinks.color($my-theme);
+// Get the background map from the theme
+$background: map.get($my-theme, background);
+
+$background-color: map-get($background, background);
+@debug $background-color;
+
+// Change the background color to #FFFFED
+$background: map.merge(
+  $background,
+  (
+    background: #FFFFED,
+  )
+);
+
+// Merge the updated background map back into the theme
+$my-theme: map.merge($my-theme, (background: $background));
+
+$background-color: map-get($background, background);
+@debug $background-color;
+
+@include softDrinks.theme($my-theme);
+@include mat.all-component-themes($my-theme);
