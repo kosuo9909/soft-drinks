@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Product, SoftDrinksService } from '../services/soft-drinks.service';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import {} from '@angular/common/http';
 import {
   Subject,
   catchError,
@@ -28,7 +28,11 @@ import { DataSharingService } from '../services/dataSharing.service';
   standalone: true,
   imports: [
     CommonModule,
-    HttpClientModule,
+    
+// TODO: `HttpClientModule` should not be imported into a component directly.
+// Please refactor the code to add `provideHttpClient()` call to the provider list in the
+// application bootstrap logic and remove the `HttpClientModule` import from this component.
+HttpClientModule,
     MatSelectModule,
     MatIconModule,
     MatMenuModule,
